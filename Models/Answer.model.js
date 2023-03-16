@@ -19,6 +19,11 @@ const AnswerSchema = new Schema({
             {
             comment: "",
             }
+        ],
+        comments2: [
+            {
+            comment: "",
+            }
         ]
         }
     ]

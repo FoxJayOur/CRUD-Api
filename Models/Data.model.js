@@ -23,6 +23,11 @@ const DataSchema = new Schema({
             {
             comment: "",
             }
+        ],
+        comments2: [
+            {
+            comment: "",
+            }
         ]
         }
     ]
