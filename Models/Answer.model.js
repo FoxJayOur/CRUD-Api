@@ -26,6 +26,16 @@ const AnswerSchema = new Schema({
             }
         ]
         }
+    ],
+    questions3: [
+        {
+        question: "",
+        comments: [
+            {
+            comment: "",
+            }
+        ]
+        }
     ]
 });
 

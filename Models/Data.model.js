@@ -30,6 +30,16 @@ const DataSchema = new Schema({
             }
         ]
         }
+    ],
+    questions3: [
+        {
+        question: "",
+        comments: [
+            {
+            comment: "",
+            }
+        ]
+        }
     ]
 });
 
