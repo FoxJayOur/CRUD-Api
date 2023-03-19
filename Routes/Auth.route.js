@@ -26,6 +26,7 @@ router.post('/input', async (req, res, next) => {
     const data = new Data(req.body)
     const savedData = await data.save()
     
+    
     res.send({savedData})
 });
 
@@ -110,7 +111,8 @@ router.post('/login', async (req, res, next) => {
 
         const accessToken = await signAccessToken(user.id)
         const refreshToken = await signRefreshToken(user.id)
-        res.send({ accessToken, refreshToken})  
+        res.send({ accessToken, refreshToken})
+        console.log({ accessToken, refreshToken})  
         //res.send(result)
     } catch (error){
         next(error)
