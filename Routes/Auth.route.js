@@ -14,6 +14,8 @@ const router = express.Router();
 const createError = require('http-errors')
 const User = require('../Models/User.model')
 const Data = require('../Models/Data.model')
+const Data2 = require('../Models/Data2.model')
+const Data3 = require('../Models/Data3.model')
 const Answer = require('../Models/Answer.model')
 //const {authSchema, loginSchema} = require('../helpers/Validation');
 const {authSchema} = require('../helpers/Validation');
@@ -25,6 +27,20 @@ const {signAccessToken, signRefreshToken, verifyRefreshToken} = require('../help
 router.post('/input', async (req, res, next) => {
     const data = new Data(req.body)
     const savedData = await data.save()
+    
+    
+    res.send({savedData})
+});
+router.post('/input2', async (req, res, next) => {
+    const data2 = new Data2(req.body)
+    const savedData = await data2.save()
+    
+    
+    res.send({savedData})
+});
+router.post('/input3', async (req, res, next) => {
+    const data3 = new Data3(req.body)
+    const savedData = await data3.save()
     
     
     res.send({savedData})
