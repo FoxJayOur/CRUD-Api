@@ -39,6 +39,6 @@ const AnswerSchema = new Schema({
     ]
 });
 
-const Answer = mongoose.model('answer', AnswerSchema);
-module.exports = Answer;
+const Answer3 = mongoose.model('answer3', AnswerSchema);
+module.exports = Answer3;
 

@@ -17,6 +17,8 @@ const Data = require('../Models/Data.model')
 const Data2 = require('../Models/Data2.model')
 const Data3 = require('../Models/Data3.model')
 const Answer = require('../Models/Answer.model')
+const Answer2 = require('../Models/Answer2.model')
+const Answer3 = require('../Models/Answer3.model')
 //const {authSchema, loginSchema} = require('../helpers/Validation');
 const {authSchema} = require('../helpers/Validation');
 const {signAccessToken, signRefreshToken, verifyRefreshToken} = require('../helpers/jwt');
@@ -52,6 +54,18 @@ router.post('/answer', async (req, res, next) => {
     
     res.send({savedAnswer})
 });
+router.post('/answer2', async (req, res, next) => {
+    const answer2 = new Answer2(req.body)
+    const savedAnswer = await answer2.save()
+    
+    res.send({savedAnswer})
+});
+router.post('/answer3', async (req, res, next) => {
+    const answer3 = new Answer3(req.body)
+    const savedAnswer = await answer3.save()
+    
+    res.send({savedAnswer})
+});
 
 router.get('/ListOfForms', async (req, res, next) => {
     try {
@@ -78,6 +92,28 @@ router.post('/title', async (req, res, next) => {
     try {
         const FormTitle = (req.body.wtitle)
         const FormList = await Data.findOne({title: FormTitle})
+        res.send(JSON.stringify(FormList))
+        console.log(FormList)
+    } catch (error){
+        next(error);
+    }
+
+})
+router.post('/title2', async (req, res, next) => {
+    try {
+        const FormTitle = (req.body.wtitle)
+        const FormList = await Data2.findOne({title: FormTitle})
+        res.send(JSON.stringify(FormList))
+        console.log(FormList)
+    } catch (error){
+        next(error);
+    }
+
+})
+router.post('/title3', async (req, res, next) => {
+    try {
+        const FormTitle = (req.body.wtitle)
+        const FormList = await Data3.findOne({title: FormTitle})
         res.send(JSON.stringify(FormList))
         console.log(FormList)
     } catch (error){
