@@ -8,7 +8,7 @@ npm install express
             bcrypt
             jsonwebtoken
    SET PORT
-   sET PORT=
+   sET PORT= 
 */
 
 const express = require('express');
