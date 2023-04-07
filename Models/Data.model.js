@@ -6,6 +6,10 @@ const DataSchema = new Schema({
         type: String,
         required: true,
     },
+    expiryDate: {
+        type: Date,
+        required: true,
+    },
     questions: [
         {
         question: "",
