@@ -41,11 +41,23 @@ router.post('/input2', async (req, res, next) => {
     res.send({savedData})
 });
 router.post('/input3', async (req, res, next) => {
-    const data3 = new Data3(req.body)
-    const savedData = await data3.save()
-    
-    
-    res.send({savedData})
+    try {
+        const formExist = await Data3.findOne({title: req.body.title})
+        if(formExist) {
+            console.log("Form already exists")
+        }
+        else {
+            const data3 = new Data3(req.body)
+            const savedData = await data3.save()
+
+            res.send({savedData})
+        }
+    } catch (error){
+        // if error is comming from Joi
+        if (error.isJoi === true) error.status = 422    // 422 Unprocessable Entity
+        next(error)
+
+    }
 });
 
 router.post('/answer', async (req, res, next) => {
