@@ -8,7 +8,9 @@ http://localhost:3000/formanaAuth/input
 http://localhost:3000/formanaAuth/ListOfForms
 */
 
-
+const nodemailer = require('nodemailer');
+const Mailgen = require('mailgen');
+const bcrypt = require('bcrypt');
 const express = require('express');
 const router = express.Router();
 const createError = require('http-errors')
@@ -19,68 +21,59 @@ const Data3 = require('../Models/Data3.model')
 const Answer = require('../Models/Answer.model')
 const Answer2 = require('../Models/Answer2.model')
 const Answer3 = require('../Models/Answer3.model')
+const OTPVerify = require('../OTPModels/userOTP')
 //const {authSchema, loginSchema} = require('../helpers/Validation');
 const {authSchema} = require('../helpers/Validation');
 const {signAccessToken, signRefreshToken, verifyRefreshToken} = require('../helpers/jwt');
 
 // define the routes
-
+let transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    auth: {
+        user: process.env.EMAIL,
+        pass: process.env.PASS,
+    },
+});
 // REGISTER USERS
 router.post('/input', async (req, res, next) => {
-    try {
-        const formExist = await Data.findOne({title: req.body.title})
-        if(formExist) {
-            console.log("Form already exists")
-        }
-        else {
-            const data = new Data(req.body)
-            const savedData = await data.save()
-
-            res.send({savedData})
-        }
-    } catch (error){
-        // if error is comming from Joi
-        if (error.isJoi === true) error.status = 422    // 422 Unprocessable Entity
-        next(error)
-
+    
+    const formExist = await Data.findOne({title: req.body.title})
+    if(formExist) {
+        console.log("Form already exists")
     }
+    else {
+        const data = new Data(req.body)
+        const savedData = await data.save()
+
+        res.send({savedData})
+    }
+    
 });
 router.post('/input2', async (req, res, next) => {
-    try {
-        const formExist = await Data2.findOne({title: req.body.title})
-        if(formExist) {
-            console.log("Form already exists")
-        }
-        else {
-            const data2 = new Data2(req.body)
-            const savedData = await data2.save()
-
-            res.send({savedData})
-        }
-    } catch (error){
-        // if error is comming from Joi
-        if (error.isJoi === true) error.status = 422    // 422 Unprocessable Entity
-        next(error)
-
+    
+    const formExist = await Data2.findOne({title: req.body.title})
+    if(formExist) {
+        console.log("Form already exists")
     }
+    else {
+        const data2 = new Data2(req.body)
+        const savedData = await data2.save()
+
+        res.send({savedData})
+    }
+    
 });
 router.post('/input3', async (req, res, next) => {
-    try {
-        const formExist = await Data3.findOne({title: req.body.title})
-        if(formExist) {
-            console.log("Form already exists")
-        }
-        else {
-            const data3 = new Data3(req.body)
-            const savedData = await data3.save()
+    
+    const formExist = await Data3.findOne({title: req.body.title})
+    if(formExist) {
+        console.log("Form already exists")
+    }
+    else {
+        const data3 = new Data3(req.body)
+        const savedData = await data3.save()
 
-            res.send({savedData})
-        }
-    } catch (error){
-        // if error is comming from Joi
-        if (error.isJoi === true) error.status = 422    // 422 Unprocessable Entity
-        next(error)
-
+        res.send({savedData})
     }
 });
 
@@ -225,6 +218,47 @@ router.delete('/logout', async (req, res, next) => {
     res.send('logout route')
 })
 
+router.post('/formNotif', async (req, res, next) => {
+    sendOTPVerify(req.body, res);
+})
 
+const sendOTPVerify = async ({_id, email}, res) => {
+    try {
+        const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
+
+        const mailOptions = {
+            from: "BatStateU - Forms Handler",
+            to: email,
+            subject: "Verify email",
+            html: `<p>Enter <b>${otp}</b> in the app to verify your email address and complete the registration process</p>
+            <p>This code <b>expires in 1 hour</b></p>`,
+        };
+
+        const saltRounds = 10;
+        const hashedOTP = await bcrypt.hash(otp, saltRounds);
+        const newOTPVerify = await new OTPVerify ({
+            userId: _id,
+            otp: hashedOTP,
+            createdAt: Date.now(),
+            expiresAt: Date.now() + 360000,
+        });
+
+        await newOTPVerify.save();
+        await transporter.sendMail(mailOptions);
+        res.json({
+            status: "PENDING",
+            message: "Verification otp email sent",
+            data: {
+                userId: _id,
+                email, 
+            }
+        })
+    } catch (error) {
+        res.json({
+            status: "FAILED",
+            message: error.message,
+        })
+    }
+}
 
 module.exports = router

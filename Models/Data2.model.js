@@ -47,7 +47,11 @@ const DataSchema = new Schema({
             }
         ]
         }
-    ]
+    ],
+    approvedBy: {
+        type: String,
+        required: true,
+    }
 });
 
 const Data2 = mongoose.model('data2', DataSchema);
