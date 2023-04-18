@@ -2,7 +2,7 @@ const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 
 const userOTPVerificationSchema = new Schema({
-    userID: String,
+    userId: String,
     otp: String,
     createdAt: Date,
     expiresAt: Date,

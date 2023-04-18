@@ -222,10 +222,61 @@ router.post('/formNotif', async (req, res, next) => {
     sendOTPVerify(req.body, res);
 })
 
+router.post('/verifyOTP', async (req, res) => {
+    try {
+        let { userId, otp } = req.body;
+        if (!userId || !otp) {
+            throw Error("OTP Null Error");
+        }
+        else {
+            const UserOTPVerRec = await OTPVerify.findOne({
+                userId
+            });
+            await new Promise(f => setTimeout(f, 3000));
+            console.log(UserOTPVerRec)
+            if (UserOTPVerRec.length <= 0) {
+                throw new Error (
+                    "Account record does not exist or it has been verified already."
+                );
+            }
+            else {
+                const {expiresAt} = UserOTPVerRec[0];
+                const hashedOTP = UserOTPVerRec[0].otp;
+
+                if (expiresAt < Date.now()) {
+                    await OTPVerify.deleteMany({userId});
+                    throw new Error("Code expired, request otp again");
+                }
+                else {
+                    const validOTP = await bcrypt.compare(otp, hashedOTP);
+
+                    if (!validOTP) {
+                        throw new Error("Invalid code, check email!");
+                    }
+                    else {
+                        await User.updateOne({_id: userId}, {verified: true});
+                        await OTPVerify.deleteMany ({userId});
+                        res.json({
+                            status: "VERIFIED",
+                            message: "Your user email has been verified, you may now use Formana!",
+                        });
+                    }
+                }
+            }
+        }
+    }
+    catch (error) {
+        res.json({
+            status: "FAILED",
+            message: error.message,
+        });
+    }
+})
+
 const sendOTPVerify = async ({_id, email}, res) => {
     try {
         const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
-
+       
         const mailOptions = {
             from: "BatStateU - Forms Handler",
             to: email,
@@ -243,7 +294,7 @@ const sendOTPVerify = async ({_id, email}, res) => {
             expiresAt: Date.now() + 360000,
         });
 
-        await newOTPVerify.save();
+        const getUserId = await newOTPVerify.save();
         await transporter.sendMail(mailOptions);
         res.json({
             status: "PENDING",
@@ -251,8 +302,10 @@ const sendOTPVerify = async ({_id, email}, res) => {
             data: {
                 userId: _id,
                 email, 
-            }
+            },
+            getUserId
         })
+
     } catch (error) {
         res.json({
             status: "FAILED",
@@ -260,5 +313,6 @@ const sendOTPVerify = async ({_id, email}, res) => {
         })
     }
 }
+
 
 module.exports = router
