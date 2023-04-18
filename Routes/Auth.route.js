@@ -229,8 +229,8 @@ router.post('/verifyOTP', async (req, res) => {
             throw Error("OTP Null Error");
         }
         else {
-            const UserOTPVerRec = await OTPVerify.findOne({
-                userId
+            const UserOTPVerRec = await OTPVerify.find({
+                _id: userId
             });
             await new Promise(f => setTimeout(f, 3000));
             console.log(UserOTPVerRec)
