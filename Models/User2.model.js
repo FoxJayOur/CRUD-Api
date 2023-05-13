@@ -7,16 +7,16 @@ const ProgramSchema = new mongoose.Schema({
     prog: mongoose.SchemaTypes.ObjectId,
 
 });
-const Program = mongoose.model('program', ProgramSchema);
-module.exports = Program;
+const Program2 = mongoose.model('program2', ProgramSchema);
+module.exports = Program2;
 
 const DepartmentSchema = new mongoose.Schema({
     deptName: String,
     dept: mongoose.SchemaTypes.ObjectId,
     program: ProgramSchema
 });
-const Department = mongoose.model('department', DepartmentSchema);
-module.exports = Department;
+const Department2 = mongoose.model('department2', DepartmentSchema);
+module.exports = Department2;
 
 const UserSchema = new Schema({
     name: {
