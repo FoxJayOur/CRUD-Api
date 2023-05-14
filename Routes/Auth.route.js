@@ -23,6 +23,7 @@ const Answer = require('../Models/Answer.model')
 const Answer2 = require('../Models/Answer2.model')
 const Answer3 = require('../Models/Answer3.model')
 const OTPVerify = require('../OTPModels/userOTP')
+const Suggestions = require('../Models/suggestions.model')
 //const {authSchema, loginSchema} = require('../helpers/Validation');
 const {authSchema} = require('../helpers/Validation');
 const {signAccessToken, signRefreshToken, verifyRefreshToken} = require('../helpers/jwt');
@@ -35,6 +36,12 @@ let transporter = nodemailer.createTransport({
         pass: process.env.PASS,
     },
 });
+router.post('/addSuggestions', async (req, res, next) =>  {
+    const suggestions = new Suggestions(req.body)
+    const savedSuggestions = await suggestions.save()
+
+    res.send({savedSuggestions})
+})
 router.get('/viewAll', async (req, res, next) =>  {
     const formDataAll = await Data.find({})
     const formData2All = await Data2.find({})
