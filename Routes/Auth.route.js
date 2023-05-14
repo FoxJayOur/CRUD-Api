@@ -35,6 +35,13 @@ let transporter = nodemailer.createTransport({
         pass: process.env.PASS,
     },
 });
+router.get('/viewAll', async (req, res, next) =>  {
+    const formDataAll = await Data.find({})
+    const formData2All = await Data2.find({})
+    const formData3All = await Data3.find({})
+    res.send({formDataAll, formData2All, formData3All})
+
+})
 // REGISTER USERS
 router.post('/input', async (req, res, next) => {
     
