@@ -36,6 +36,36 @@ let transporter = nodemailer.createTransport({
         pass: process.env.PASS,
     },
 });
+router.post('/viewAnswersForms', async (req, res, next) =>  {
+    try {
+        const Answers = await Answer.find({title: req.body.nameTitle});
+        console.log(Answers)
+        res.send({Answers})
+    } catch (error){
+        next(error);
+    }
+
+})
+router.post('/viewAnswersForms2', async (req, res, next) =>  {
+    try {
+        const Answers = await Answer2.find({title: req.body.nameTitle});
+        console.log(Answers)
+        res.send({Answers})
+    } catch (error){
+        next(error);
+    }
+
+})
+router.post('/viewAnswersForms3', async (req, res, next) =>  {
+    try {
+        const Answers = await Answer3.find({title: req.body.nameTitle});
+        console.log(Answers)
+        res.send({Answers})
+    } catch (error){
+        next(error);
+    }
+
+})
 router.post('/addSuggestions', async (req, res, next) =>  {
     const suggestions = new Suggestions(req.body)
     const savedSuggestions = await suggestions.save()
