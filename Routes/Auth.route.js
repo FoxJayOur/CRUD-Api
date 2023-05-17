@@ -49,6 +49,36 @@ router.get('/viewAll', async (req, res, next) =>  {
     res.send({formDataAll, formData2All, formData3All})
 
 })
+router.post('/deleteDocument', async (req, res, next) =>  {
+    try {
+        const deleteDocs = await Data.deleteOne({title: req.body.nameTitle});
+        console.log(deleteDocs)
+        res.send({deleteDocs})
+    } catch (error){
+        next(error);
+    }
+
+})
+router.post('/deleteDocument2', async (req, res, next) =>  {
+    try {
+        const deleteDocs = await Data2.deleteOne({title: req.body.nameTitle});
+        console.log(deleteDocs)
+        res.send({deleteDocs})
+    } catch (error){
+        next(error);
+    }
+
+})
+router.post('/deleteDocument3', async (req, res, next) =>  {
+    try {
+        const deleteDocs = await Data3.deleteOne({title: req.body.nameTitle});
+        console.log(deleteDocs)
+        res.send({deleteDocs})
+    } catch (error){
+        next(error);
+    }
+
+})
 // REGISTER USERS
 router.post('/input', async (req, res, next) => {
     
