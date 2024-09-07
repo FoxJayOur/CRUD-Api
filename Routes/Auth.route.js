@@ -1,11 +1,11 @@
 /*
-http://localhost:3000
-http://localhost:3000/formanaAuth/register
-http://localhost:3000/formanaAuth/login
-http://localhost:3000/formanaAuth/logout
-http://localhost:3000/formanaAuth/refresh-token
-http://localhost:3000/formanaAuth/input
-http://localhost:3000/formanaAuth/ListOfForms
+http://localhost:8080
+http://localhost:8080/Auth/register
+http://localhost:8080/Auth/login
+http://localhost:8080/Auth/logout
+http://localhost:8080/Auth/refresh-token
+http://localhost:8080/Auth/input
+http://localhost:8080/Auth/ListOfForms
 */
 
 const nodemailer = require('nodemailer');
@@ -16,12 +16,6 @@ const router = express.Router();
 const createError = require('http-errors')
 const User = require('../Models/User.model')
 const User2 = require('../Models/User2.model')
-const Data = require('../Models/Data.model')
-const Data2 = require('../Models/Data2.model')
-const Data3 = require('../Models/Data3.model')
-const Answer = require('../Models/Answer.model')
-const Answer2 = require('../Models/Answer2.model')
-const Answer3 = require('../Models/Answer3.model')
 const OTPVerify = require('../OTPModels/userOTP')
 const Suggestions = require('../Models/suggestions.model')
 //const {authSchema, loginSchema} = require('../helpers/Validation');
@@ -36,86 +30,17 @@ let transporter = nodemailer.createTransport({
         pass: process.env.PASS,
     },
 });
-router.post('/viewAnswersForms', async (req, res, next) =>  {
-    try {
-        const Answers = await Answer.find({title: req.body.nameTitle});
-        console.log(Answers)
-        res.send({Answers})
-    } catch (error){
-        next(error);
-    }
 
-})
 router.post('/addSuggestions', async (req, res, next) =>  {
     const suggestions = new Suggestions(req.body)
     const savedSuggestions = await suggestions.save()
 
     res.send({savedSuggestions})
 })
-router.get('/viewAll', async (req, res, next) =>  {
-    const formDataAll = await Data.find({})
-    const formData2All = await Data2.find({})
-    const formData3All = await Data3.find({})
-    res.send({formDataAll, formData2All, formData3All})
 
-})
-router.post('/deleteDocument', async (req, res, next) =>  {
-    try {
-        const deleteDocs = await Data.deleteOne({title: req.body.nameTitle});
-        console.log(deleteDocs)
-        res.send({deleteDocs})
-    } catch (error){
-        next(error);
-    }
 
-})
 
-// REGISTER USERS
-router.post('/input', async (req, res, next) => {
-    
-    const formExist = await Data.findOne({title: req.body.title})
-    if(formExist) {
-        console.log("Form already exists")
-    }
-    else {
-        const data = new Data(req.body)
-        const savedData = await data.save()
-
-        res.send({savedData})
-    }
-    
-});
-
-router.post('/answer', async (req, res, next) => {
-    const answer = new Answer(req.body)
-    const savedAnswer = await answer.save()
-    
-    res.send({savedAnswer})
-});
-
-router.get('/ListOfForms', async (req, res, next) => {
-    try {
-        const FormList = await Data.findOne({title: "TrialPleaseWork"})
-        res.send(FormList)
-        console.log(FormList)
-    } catch (error){
-        next(error);
-    }
-
-})
-
-router.post('/title', async (req, res, next) => {
-    try {
-        const FormTitle = (req.body.wtitle)
-        const FormList = await Data.findOne({title: FormTitle})
-        res.send(JSON.stringify(FormList))
-        console.log(FormList)
-    } catch (error){
-        next(error);
-    }
-
-})
-
+// REGISTER USERS Type1 
 router.post('/register', async (req, res, next) => {
     //console.log(req.body)
     try {
@@ -143,6 +68,8 @@ router.post('/register', async (req, res, next) => {
 
     }
 });
+
+// REGISTER USERS Type2
 router.post('/register2', async (req, res, next) => {
     //console.log(req.body)
     try {
@@ -171,6 +98,7 @@ router.post('/register2', async (req, res, next) => {
     }
 });
 
+// LOGIN USERS Type1
 router.post('/login', async (req, res, next) => {
     try {
                 // find user inside users(Collection)
@@ -192,6 +120,8 @@ router.post('/login', async (req, res, next) => {
         next(error)
     }
 })
+
+// LOGIN USERS Type2
 router.post('/login2', async (req, res, next) => {
     try {
                 // find user inside users(Collection)

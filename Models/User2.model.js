@@ -2,22 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt');
 
-const ProgramSchema = new mongoose.Schema({
-    progName: String,
-    prog: mongoose.SchemaTypes.ObjectId,
-
-});
-const Program2 = mongoose.model('program2', ProgramSchema);
-module.exports = Program2;
-
-const DepartmentSchema = new mongoose.Schema({
-    deptName: String,
-    dept: mongoose.SchemaTypes.ObjectId,
-    program: ProgramSchema
-});
-const Department2 = mongoose.model('department2', DepartmentSchema);
-module.exports = Department2;
-
 const UserSchema = new Schema({
     name: {
         type: String,
@@ -33,16 +17,12 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
-    srcode: {
-        type: Number,
-        required: true
-    },
+    /*
     isAdmin: {
         type: Boolean,
         required: true
     },
-    department:
-        DepartmentSchema,
+    */
     createdAt: {
         type: Date,
         immutablee: true,

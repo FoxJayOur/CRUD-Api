@@ -2,22 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt');
 
-const ProgramSchema = new mongoose.Schema({
-    progName: String,
-    prog: mongoose.SchemaTypes.ObjectId,
-
-});
-const Program = mongoose.model('program', ProgramSchema);
-module.exports = Program;
-
-const DepartmentSchema = new mongoose.Schema({
-    deptName: String,
-    dept: mongoose.SchemaTypes.ObjectId,
-    program: ProgramSchema
-});
-const Department = mongoose.model('department', DepartmentSchema);
-module.exports = Department;
-
 const UserSchema = new Schema({
     name: {
         type: String,
@@ -33,16 +17,12 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
-    srcode: {
-        type: Number,
-        required: true
-    },
+    /*
     isAdmin: {
         type: Boolean,
         required: true
     },
-    department:
-        DepartmentSchema,
+    */
     createdAt: {
         type: Date,
         immutablee: true,
@@ -52,7 +32,6 @@ const UserSchema = new Schema({
         type: Date,
         default: () => Date.now()
     }
-
 });
 
 // called after saving a user
