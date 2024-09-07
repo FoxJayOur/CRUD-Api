@@ -18,18 +18,25 @@ const {authSchema} = require('../helpers/Validation');
 const {signAccessToken, signRefreshToken, verifyRefreshToken} = require('../helpers/jwt');
 
 router.post('/addItem', async (req, res, next) => {
-    const lot = new LOT(req.body)
-    const savedLOT = await lot.save()
-    
-    res.send({savedLOT})
+    const itemExist = await LOT.findOne({name: req.body.name})
+    if(itemExist) {
+        console.log("Order already exists")
+    }
+    else {
+        const lot = new LOT(req.body)
+        const savedLOT = await lot.save()
+        
+        res.send({savedLOT})
+    }
 });
 router.post('/deleteItem', async (req, res, next) =>  {
     try {
-        const deleteItem = await LOT.deleteOne({title: req.body.nameTitle});
+        const deleteItem = await LOT.deleteOne({name: req.body.name});
         console.log(deleteItem)
         res.send({deleteItem})
     } catch (error){
-        next(error);
+        next(error)
+        res.send("Item not found")
     }
 })
 router.post('/viewListOfItems', async (req, res, next) =>  {
@@ -39,6 +46,7 @@ router.post('/viewListOfItems', async (req, res, next) =>  {
         res.send({lot})
     } catch (error){
         next(error);
+        res.send("Item not found")
     }
 
 })

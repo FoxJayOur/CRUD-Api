@@ -19,7 +19,7 @@ const {signAccessToken, signRefreshToken, verifyRefreshToken} = require('../help
 
 router.post('/addOrder', async (req, res, next) => {
     
-    const orderExist = await Orders.findOne({title: req.body.title})
+    const orderExist = await Orders.findOne({order: req.body.order})
     if(orderExist) {
         console.log("Order already exists")
     }
@@ -33,17 +33,22 @@ router.post('/addOrder', async (req, res, next) => {
 });
 router.post('/deleteOrder', async (req, res, next) =>  {
     try {
-        const deleteOrder = await Orders.deleteOne({title: req.body.nameTitle});
+        const deleteOrder = await Orders.deleteOne({order: req.body.order});
         console.log(deleteOrder)
         res.send({deleteOrder})
     } catch (error){
-        next(error);
+        next(error)
+        res.send("Item not found")
     }
 })
 router.get('/viewAll', async (req, res, next) =>  {
-    const orderDataAll = await Orders.find({})
-    res.send({orderDataAll})
-
+    try {
+        const orderDataAll = await Orders.find({})
+        res.send({orderDataAll})
+    } catch (error) {
+        next(error)
+        res.send("Item not found")
+    }
 })
 
 module.exports = router
