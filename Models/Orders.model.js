@@ -15,8 +15,11 @@ const OrderSchema = new Schema({
         productTypes: [
             {
             productType: "",
+            },
+            {
+            price: Number,
             }
-        ]
+        ],
         }
     ],
     cashierName: {
