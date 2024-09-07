@@ -39,6 +39,41 @@ router.post('/deleteItem', async (req, res, next) =>  {
         res.send("Item not found")
     }
 })
+router.post('/updateItem', async (req, res, next) =>  {
+    try {
+        // Destructure the request body
+        const { name, imageUrl, barcodeID } = req.body;
+
+        // Ensure all required fields are provided
+        if (!name || !imageUrl || !barcodeID) {
+            return res.status(400).send('Missing required fields');
+        }
+
+        // Create the update object
+        const updateData = {
+            name,       // Optional, only if you want to update the name too
+            imageUrl,
+            barcodeID
+        };
+
+        // Perform the update operation
+        const updatedItem = await LOT.findOneAndUpdate(
+            { name: name },                // Filter: find document by name
+            { $set: updateData },          // Update operation: replace content
+            { new: true, runValidators: true } // Options: return updated doc, validate data
+        );
+
+        if (!updatedItem) {
+            return res.status(404).send('Item not found');
+        }
+
+        // Respond with the updated document
+        res.status(200).json(updatedItem);
+    } catch (error) {
+        // Pass the error to the error handling middleware
+        next(error);
+    }
+})
 router.post('/viewListOfItems', async (req, res, next) =>  {
     try {
         const lot = await LOT.find({name: req.body.name});

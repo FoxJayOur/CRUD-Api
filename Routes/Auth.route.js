@@ -16,6 +16,7 @@ const router = express.Router();
 const createError = require('http-errors')
 const User = require('../Models/User.model')
 const User2 = require('../Models/User2.model')
+const Token = require('../Models/Token.model')
 const OTPVerify = require('../OTPModels/userOTP')
 const Suggestions = require('../Models/suggestions.model')
 //const {authSchema, loginSchema} = require('../helpers/Validation');
@@ -58,7 +59,11 @@ router.post('/register', async (req, res, next) => {
 
         const accessToken = await signAccessToken(savedUser.id)
         const refreshToken = await signRefreshToken(savedUser.id)
-        res.send({accessToken, refreshToken})
+        console.log({ accessToken, refreshToken})  
+        //res.send(result)
+        const token = new Token({token: accessToken})
+        const savedToken = await token.save()
+        res.send({savedToken, accessToken, refreshToken})
 
         //res.send(savedUser)
     } catch (error){
@@ -87,7 +92,11 @@ router.post('/register2', async (req, res, next) => {
 
         const accessToken = await signAccessToken(savedUser.id)
         const refreshToken = await signRefreshToken(savedUser.id)
-        res.send({accessToken, refreshToken})
+        console.log({ accessToken, refreshToken})  
+        //res.send(result)
+        const token = new Token({token: accessToken})
+        const savedToken = await token.save()
+        res.send({savedToken, accessToken, refreshToken})
 
         //res.send(savedUser)
     } catch (error){
@@ -113,9 +122,11 @@ router.post('/login', async (req, res, next) => {
 
         const accessToken = await signAccessToken(user.id)
         const refreshToken = await signRefreshToken(user.id)
-        res.send({ accessToken, refreshToken})
         console.log({ accessToken, refreshToken})  
         //res.send(result)
+        const token = new Token({token: accessToken})
+        const savedToken = await token.save()
+        res.send({savedToken, accessToken, refreshToken})
     } catch (error){
         next(error)
     }
@@ -136,9 +147,11 @@ router.post('/login2', async (req, res, next) => {
 
         const accessToken = await signAccessToken(user.id)
         const refreshToken = await signRefreshToken(user.id)
-        res.send({ accessToken, refreshToken})
         console.log({ accessToken, refreshToken})  
         //res.send(result)
+        const token = new Token({token: accessToken})
+        const savedToken = await token.save()
+        res.send({savedToken, accessToken, refreshToken})
     } catch (error){
         next(error)
     }
