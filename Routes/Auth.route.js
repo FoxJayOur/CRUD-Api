@@ -46,26 +46,6 @@ router.post('/viewAnswersForms', async (req, res, next) =>  {
     }
 
 })
-router.post('/viewAnswersForms2', async (req, res, next) =>  {
-    try {
-        const Answers = await Answer2.find({title: req.body.nameTitle});
-        console.log(Answers)
-        res.send({Answers})
-    } catch (error){
-        next(error);
-    }
-
-})
-router.post('/viewAnswersForms3', async (req, res, next) =>  {
-    try {
-        const Answers = await Answer3.find({title: req.body.nameTitle});
-        console.log(Answers)
-        res.send({Answers})
-    } catch (error){
-        next(error);
-    }
-
-})
 router.post('/addSuggestions', async (req, res, next) =>  {
     const suggestions = new Suggestions(req.body)
     const savedSuggestions = await suggestions.save()
@@ -89,26 +69,7 @@ router.post('/deleteDocument', async (req, res, next) =>  {
     }
 
 })
-router.post('/deleteDocument2', async (req, res, next) =>  {
-    try {
-        const deleteDocs = await Data2.deleteOne({title: req.body.nameTitle});
-        console.log(deleteDocs)
-        res.send({deleteDocs})
-    } catch (error){
-        next(error);
-    }
 
-})
-router.post('/deleteDocument3', async (req, res, next) =>  {
-    try {
-        const deleteDocs = await Data3.deleteOne({title: req.body.nameTitle});
-        console.log(deleteDocs)
-        res.send({deleteDocs})
-    } catch (error){
-        next(error);
-    }
-
-})
 // REGISTER USERS
 router.post('/input', async (req, res, next) => {
     
@@ -124,49 +85,10 @@ router.post('/input', async (req, res, next) => {
     }
     
 });
-router.post('/input2', async (req, res, next) => {
-    
-    const formExist = await Data2.findOne({title: req.body.title})
-    if(formExist) {
-        console.log("Form already exists")
-    }
-    else {
-        const data2 = new Data2(req.body)
-        const savedData = await data2.save()
-
-        res.send({savedData})
-    }
-    
-});
-router.post('/input3', async (req, res, next) => {
-    
-    const formExist = await Data3.findOne({title: req.body.title})
-    if(formExist) {
-        console.log("Form already exists")
-    }
-    else {
-        const data3 = new Data3(req.body)
-        const savedData = await data3.save()
-
-        res.send({savedData})
-    }
-});
 
 router.post('/answer', async (req, res, next) => {
     const answer = new Answer(req.body)
     const savedAnswer = await answer.save()
-    
-    res.send({savedAnswer})
-});
-router.post('/answer2', async (req, res, next) => {
-    const answer2 = new Answer2(req.body)
-    const savedAnswer = await answer2.save()
-    
-    res.send({savedAnswer})
-});
-router.post('/answer3', async (req, res, next) => {
-    const answer3 = new Answer3(req.body)
-    const savedAnswer = await answer3.save()
     
     res.send({savedAnswer})
 });
@@ -181,17 +103,7 @@ router.get('/ListOfForms', async (req, res, next) => {
     }
 
 })
-/*router.post('/title2', async (req, res, next) => {
-    try {
-        const FormTitle = JSON.stringify(req.body.wtitle)
-        const FormList = await Data.findOne({title: FormTitle})
-        res.send(JSON.stringify(FormList.title))
-        console.log(FormList.title)
-    } catch (error){
-        next(error);
-    }
 
-})*/
 router.post('/title', async (req, res, next) => {
     try {
         const FormTitle = (req.body.wtitle)
@@ -203,28 +115,7 @@ router.post('/title', async (req, res, next) => {
     }
 
 })
-router.post('/title2', async (req, res, next) => {
-    try {
-        const FormTitle = (req.body.wtitle)
-        const FormList = await Data2.findOne({title: FormTitle})
-        res.send(JSON.stringify(FormList))
-        console.log(FormList)
-    } catch (error){
-        next(error);
-    }
 
-})
-router.post('/title3', async (req, res, next) => {
-    try {
-        const FormTitle = (req.body.wtitle)
-        const FormList = await Data3.findOne({title: FormTitle})
-        res.send(JSON.stringify(FormList))
-        console.log(FormList)
-    } catch (error){
-        next(error);
-    }
-
-})
 router.post('/register', async (req, res, next) => {
     //console.log(req.body)
     try {
