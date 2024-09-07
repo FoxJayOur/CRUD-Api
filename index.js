@@ -20,6 +20,8 @@ require('./helpers/DB');
 const { verifyAccessToken } = require('./helpers/jwt');
 
 const AuthRoute = require('./Routes/Auth.route');
+const LOTRoute = require('./Routes/ListOfItems.route');
+const OrderRoute = require('./Routes/Order.route');
 
 // initialize the app
 const app = express();
@@ -41,7 +43,9 @@ app.get('/', verifyAccessToken, async (req, res, next) => {
 
 
 // route | link
-app.use('/api/posAuth', AuthRoute);
+app.use('/api/posAuth', AuthRoute); 
+app.use('/api/posLOT', LOTRoute); 
+app.use('/api/posOrder', OrderRoute);
 
 // all the routes that is not handle, will be handle by this code
 app.use(async(req, res, next) => {

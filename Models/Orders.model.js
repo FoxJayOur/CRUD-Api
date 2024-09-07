@@ -12,18 +12,23 @@ const OrderSchema = new Schema({
     items: [
         {
         item: "",
-        productType: [
+        productTypes: [
             {
-            comment: "",
+            productType: "",
             }
         ]
         }
     ],
-    casherName: {
+    cashierName: {
         type: String,
         required: true,
+    },
+    orderDate: {
+        type: Date,
+        immutablee: true,
+        default: () => Date.now()
     }
 });
 
-const Orders = mongoose.model('data', OrderSchema);
+const Orders = mongoose.model('orders', OrderSchema);
 module.exports = Orders;

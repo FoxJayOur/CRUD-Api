@@ -7,11 +7,11 @@ const LOTSchema = new Schema({
         type: String,
         required: true,
     },
-    image_URL: {
+    imageUrl: {
         type: String,
         required: true
     },
-    barcode_ID: {
+    barcodeID: {
         type: String,
         required: true
     }

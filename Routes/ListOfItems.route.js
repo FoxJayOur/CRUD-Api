@@ -60,3 +60,5 @@ router.get('/viewAll', async (req, res, next) =>  {
     res.send({itemsDataAll})
 
 })
+
+module.exports = router

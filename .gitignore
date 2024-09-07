@@ -1,2 +1,3 @@
 .env
 rest.http
+node_modules
